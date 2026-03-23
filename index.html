@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TR7 Content Planner — Calendrier Éditorial</title>
+<style>
+:root {
+  --tr7-primary: #6C5CE7;
+  --tr7-primary-dark: #5A4BD1;
+  --tr7-primary-light: #A29BFE;
+  --tr7-accent: #00D2D3;
+  --tr7-accent-dark: #00B4B5;
+  --tr7-dark: #0D1117;
+  --tr7-card: #161B22;
+  --tr7-card-hover: #1C2333;
+  --tr7-border: #30363D;
+  --tr7-text: #E6EDF3;
+  --tr7-text-muted: #8B949E;
+  --tr7-success: #2EA043;
+  --tr7-warning: #D29922;
+  --tr7-danger: #F85149;
+  --tr7-gradient: linear-gradient(135deg, #6C5CE7 0%, #00D2D3 100%);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: var(--tr7-dark);
+  color: var(--tr7-text);
+  min-height: 100vh;
+}
+
+/* HEADER */
+.header {
+  background: linear-gradient(135deg, rgba(108,92,231,0.15) 0%, rgba(0,210,211,0.1) 100%);
+  border-bottom: 1px solid var(--tr7-border);
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.logo {
+  font-size: 28px;
+  font-weight: 800;
+  background: var(--tr7-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.logo-sub {
+  font-size: 13px;
+  color: var(--tr7-text-muted);
+}
+
+.header-right {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.header-stat {
+  background: var(--tr7-card);
+  border: 1px solid var(--tr7-border);
+  border-radius: 10px;
+  padding: 8px 14px;
+  text-align: center;
+  min-width: 80px;
+}
+
+.header-stat .num {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--tr7-accent);
+}
+
+.header-stat .lab {
+  font-size: 10px;
+  color: var(--tr7-text-muted);
+  text-transform: uppercase;
+}
+
+/* LAYOUT */
+.container {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 0;
+  min-height: calc(100vh - 72px);
+}
+
+@media (max-width: 900px) {
+  .container { grid-template-columns: 1fr; }
+}
+
+/* LEFT PANEL - FORM */
+.panel-left {
+  background: var(--tr7-card);
+  border-right: 1px solid var(--tr7-border);
+  padding: 24px;
+  overflow-y: auto;
+  max-height: calc(100vh - 72px);
+}
+
+.panel-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--tr7-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+
+.form-input, .form-select, .form-textarea {
+  width: 100%;
+  background: var(--tr7-dark);
+  border: 1px solid var(--tr7-border);
+  border-radius: 8px;
+  color: var(--tr7-text);
+  padding: 10px 14px;
+  font-size: 14px;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  outline: none;
+  border-color: var(--tr7-primary);
+  box-shadow: 0 0 0 3px rgba(108,92,231,0.2);
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+
+.form-select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%238B949E' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 32px;
+}
+
+/* Platform checkboxes */
+.platform-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.platform-check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--tr7-dark);
+  border: 1px solid var(--tr7-border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.platform-check:hover {
+  border-color: var(--tr7-primary-light);
+}
+
+.platform-check.active {
+  border-color: var(--tr7-primary);
+  background: rgba(108,92,231,0.1);
+}
+
+.platform-check input { display: none; }
+
+.platform-icon {
+  font-size: 18px;
+}
+
+.platform-name {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* Date/Time row */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+  width: 100%;
+}
+
+.btn-primary {
+  background: var(--tr7-gradient);
+  color: white;
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(108,92,231,0.4);
+}
+
+.btn-secondary {
+  background: var(--tr7-dark);
+  color: var(--tr7-text);
+  border: 1px solid var(--tr7-border);
+}
+
+.btn-secondary:hover {
+  border-color: var(--tr7-primary-light);
+}
+
+.btn-accent {
+  background: var(--tr7-accent);
+  color: var(--tr7-dark);
+}
+
+.btn-accent:hover {
+  background: var(--tr7-accent-dark);
+}
+
+.btn-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+/* RIGHT PANEL - CALENDAR */
+.panel-right {
+  padding: 24px;
+  overflow-y: auto;
+  max-height: calc(100vh - 72px);
+}
+
+/* View Tabs */
+.view-tabs {
+  display: flex;
+  gap: 4px;
+  background: var(--tr7-card);
+  border-radius: 10px;
+  padding: 4px;
+  margin-bottom: 20px;
+  width: fit-content;
+}
+
+.view-tab {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: var(--tr7-text-muted);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+
+.view-tab.active {
+  background: var(--tr7-primary);
+  color: white;
+}
+
+/* Calendar Navigation */
+.cal-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.cal-nav-title {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.cal-nav-btn {
+  background: var(--tr7-card);
+  border: 1px solid var(--tr7-border);
+  color: var(--tr7-text);
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.cal-nav-btn:hover {
+  border-color: var(--tr7-primary);
+}
+
+/* Calendar Grid */
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.cal-header {
+  text-align: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--tr7-text-muted);
+  text-transform: uppercase;
+  padding: 8px 0;
+}
+
+.cal-day {
+  background: var(--tr7-card);
+  border: 1px solid var(--tr7-border);
+  border-radius: 8px;
+  min-height: 90px;
+  padding: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.cal-day:hover {
+  border-color: var(--tr7-primary-light);
+}
+
+.cal-day.today {
+  border-color: var(--tr7-accent);
+}
+
+.cal-day.other-month {
+  opacity: 0.3;
+}
+
+.cal-day-num {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--tr7-text-muted);
+  margin-bottom: 4px;
+}
+
+.cal-day.today .cal-day-num {
+  color: var(--tr7-accent);
+}
+
+.cal-event {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+.cal-event.type-educatif { background: rgba(108,92,231,0.3); color: #A29BFE; }
+.cal-event.type-carousel { background: rgba(0,210,211,0.3); color: #00D2D3; }
+.cal-event.type-storytelling { background: rgba(248,81,73,0.3); color: #F85149; }
+.cal-event.type-case_study { background: rgba(210,153,34,0.3); color: #D29922; }
+.cal-event.type-expert { background: rgba(46,160,67,0.3); color: #2EA043; }
+.cal-event.type-promo { background: rgba(219,127,247,0.3); color: #DB7FF7; }
+.cal-event.sent { opacity: 0.6; text-decoration: line-through; }
+
+/* List View */
+.list-view { display: none; }
+.list-view.active { display: block; }
+.calendar-view.active { display: block; }
+
+.list-item {
+  background: var(--tr7-card);
+  border: 1px solid var(--tr7-border);
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin-bottom: 8px;
+  display: grid;
+  grid-template-columns: 100px 1fr auto auto;
+  align-items: center;
+  gap: 16px;
+  transition: all 0.2s;
+}
+
+.list-item:hover {
+  border-color: var(--tr7-primary-light);
+}
+
+.list-date {
+  font-size: 12px;
+  color: var(--tr7-text-muted);
+  font-weight: 600;
+}
+
+.list-topic {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.list-type {
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-weight: 600;
+}
+
+.list-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.list-actions button {
+  background: var(--tr7-dark);
+  border: 1px solid var(--tr7-border);
+  color: var(--tr7-text);
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.list-actions button:hover {
+  border-color: var(--tr7-primary);
+}
+
+.list-actions button.delete:hover {
+  border-color: var(--tr7-danger);
+  color: var(--tr7-danger);
+}
+
+/* Status badges */
+.status-badge {
+  font-size: 10px;
+  padding: 3px 8px;
+  border-radius: 20px;
+  font-weight: 600;
+}
+
+.status-planifie { background: rgba(108,92,231,0.2); color: var(--tr7-primary-light); }
+.status-envoye { background: rgba(46,160,67,0.2); color: var(--tr7-success); }
+.status-brouillon { background: rgba(139,148,158,0.2); color: var(--tr7-text-muted); }
+
+/* Toast */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  padding: 14px 24px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 14px;
+  z-index: 9999;
+  transform: translateY(100px);
+  opacity: 0;
+  transition: all 0.3s;
+}
+
+.toast.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.toast.success { background: var(--tr7-success); color: white; }
+.toast.error { background: var(--tr7-danger); color: white; }
+.toast.info { background: var(--tr7-primary); color: white; }
+
+/* Config Modal */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-overlay.active {
+  display: flex;
+}
+
+.modal {
+  background: var(--tr7-card);
+  border: 1px solid var(--tr7-border);
+  border-radius: 14px;
+  padding: 24px;
+  max-width: 480px;
+  width: 90%;
+}
+
+.modal h3 {
+  margin-bottom: 16px;
+  font-size: 16px;
+}
+
+/* Empty state */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--tr7-text-muted);
+}
+
+.empty-state .icon {
+  font-size: 48px;
+  margin-bottom: 12px;
+}
+
+.empty-state p {
+  font-size: 14px;
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-left">
+    <div>
+      <div class="logo">⚡ TR7 Content Planner</div>
+      <div class="logo-sub">Calendrier Éditorial & Automatisation</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="header-stat">
+      <div class="num" id="statTotal">0</div>
+      <div class="lab">Planifiés</div>
+    </div>
+    <div class="header-stat">
+      <div class="num" id="statWeek">0</div>
+      <div class="lab">Cette semaine</div>
+    </div>
+    <div class="header-stat">
+      <div class="num" id="statSent">0</div>
+      <div class="lab">Publiés</div>
+    </div>
+    <div class="header-stat" style="cursor:pointer" onclick="showConfig()" title="Configuration">
+      <div class="num">⚙️</div>
+      <div class="lab">Config</div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN LAYOUT -->
+<div class="container">
+
+  <!-- LEFT: FORM -->
+  <div class="panel-left">
+    <div class="panel-title">📝 Nouveau Post</div>
+
+    <div class="form-group">
+      <label class="form-label">Sujet / Titre</label>
+      <input type="text" class="form-input" id="postTopic" placeholder="Ex: 5 automatisations IA pour PME en 2026">
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">📅 Date de publication</label>
+        <input type="date" class="form-input" id="postDate">
+      </div>
+      <div class="form-group">
+        <label class="form-label">⏰ Heure</label>
+        <input type="time" class="form-input" id="postTime" value="07:00">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">🎯 Type de contenu</label>
+      <select class="form-select" id="postType">
+        <option value="educatif">📚 Post Éducatif</option>
+        <option value="carousel">🎠 Carousel / Infographie</option>
+        <option value="storytelling">📖 Storytelling</option>
+        <option value="case_study">🔍 Case Study / REX</option>
+        <option value="expert">🎓 Post Expert</option>
+        <option value="promo">🚀 Promo / Offre</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">👥 Audience cible</label>
+      <select class="form-select" id="postAudience">
+        <option value="Dirigeants PME/ETI et DSI">Dirigeants PME/ETI & DSI</option>
+        <option value="DRH et recruteurs">DRH & Recruteurs</option>
+        <option value="Développeurs et tech leads">Développeurs & Tech Leads</option>
+        <option value="Entrepreneurs et startups">Entrepreneurs & Startups</option>
+        <option value="Tout public B2B">Tout public B2B</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">🎨 Ton</label>
+      <select class="form-select" id="postTone">
+        <option value="Expert mais accessible, avec chiffres">Expert & chiffres</option>
+        <option value="Inspirant et motivant">Inspirant & motivant</option>
+        <option value="Provocateur et disruptif">Provocateur & disruptif</option>
+        <option value="Pédagogique et pas à pas">Pédagogique</option>
+        <option value="Storytelling personnel et authentique">Storytelling authentique</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">📱 Plateformes</label>
+      <div class="platform-grid">
+        <label class="platform-check active" onclick="togglePlatform(this)">
+          <input type="checkbox" value="linkedin" checked>
+          <span class="platform-icon">💼</span>
+          <span class="platform-name">LinkedIn</span>
+        </label>
+        <label class="platform-check active" onclick="togglePlatform(this)">
+          <input type="checkbox" value="twitter" checked>
+          <span class="platform-icon">🐦</span>
+          <span class="platform-name">Twitter/X</span>
+        </label>
+        <label class="platform-check active" onclick="togglePlatform(this)">
+          <input type="checkbox" value="instagram" checked>
+          <span class="platform-icon">📸</span>
+          <span class="platform-name">Instagram</span>
+        </label>
+        <label class="platform-check" onclick="togglePlatform(this)">
+          <input type="checkbox" value="tiktok">
+          <span class="platform-icon">🎵</span>
+          <span class="platform-name">TikTok</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">🔗 URLs de référence (optionnel)</label>
+      <input type="text" class="form-input" id="postUrls" placeholder="https://...">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">📝 Notes / instructions (optionnel)</label>
+      <textarea class="form-textarea" id="postNotes" placeholder="Instructions spécifiques pour l'IA..."></textarea>
+    </div>
+
+    <div class="btn-group">
+      <button class="btn btn-secondary" onclick="saveDraft()">💾 Brouillon</button>
+      <button class="btn btn-primary" onclick="schedulePost()">📅 Planifier</button>
+    </div>
+
+    <button class="btn btn-accent" style="margin-top:10px" onclick="publishNow()">⚡ Publier maintenant</button>
+  </div>
+
+  <!-- RIGHT: CALENDAR -->
+  <div class="panel-right">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px">
+      <div class="view-tabs">
+        <button class="view-tab active" onclick="switchView('calendar', this)">📅 Calendrier</button>
+        <button class="view-tab" onclick="switchView('list', this)">📋 Liste</button>
+      </div>
+      <div class="cal-nav">
+        <button class="cal-nav-btn" onclick="navMonth(-1)">◀</button>
+        <span class="cal-nav-title" id="calTitle" style="margin:0 12px">Mars 2026</span>
+        <button class="cal-nav-btn" onclick="navMonth(1)">▶</button>
+      </div>
+    </div>
+
+    <!-- Calendar View -->
+    <div class="calendar-view active" id="calendarView">
+      <div class="cal-grid" id="calGrid"></div>
+    </div>
+
+    <!-- List View -->
+    <div class="list-view" id="listView"></div>
+  </div>
+</div>
+
+<!-- Config Modal -->
+<div class="modal-overlay" id="configModal">
+  <div class="modal">
+    <h3>⚙️ Configuration</h3>
+    <div class="form-group">
+      <label class="form-label">Google Sheets ID</label>
+      <input type="text" class="form-input" id="cfgSheetId" placeholder="1LBJ7qVn3pqF3sLukfJmhHUIFToD6CsMXCYvGpkEU2wY">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Webhook URL (n8n)</label>
+      <input type="text" class="form-input" id="cfgWebhook" placeholder="https://n8n.srv1100728.hstgr.cloud/webhook/manual-content">
+    </div>
+    <div class="btn-group">
+      <button class="btn btn-secondary" onclick="closeConfig()">Annuler</button>
+      <button class="btn btn-primary" onclick="saveConfigModal()">✅ Sauvegarder</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// =============================
+// CONFIG
+// =============================
+const DEFAULT_CONFIG = {
+  sheetId: '1LBJ7qVn3pqF3sLukfJmhHUIFToD6CsMXCYvGpkEU2wY',
+  webhookUrl: 'https://n8n.srv1100728.hstgr.cloud/webhook/manual-content'
+};
+
+function getConfig() {
+  return {
+    sheetId: localStorage.getItem('tr7cp_sheetId') || DEFAULT_CONFIG.sheetId,
+    webhookUrl: localStorage.getItem('tr7cp_webhookUrl') || DEFAULT_CONFIG.webhookUrl
+  };
+}
+
+function showConfig() {
+  const cfg = getConfig();
+  document.getElementById('cfgSheetId').value = cfg.sheetId;
+  document.getElementById('cfgWebhook').value = cfg.webhookUrl;
+  document.getElementById('configModal').classList.add('active');
+}
+
+function closeConfig() {
+  document.getElementById('configModal').classList.remove('active');
+}
+
+function saveConfigModal() {
+  localStorage.setItem('tr7cp_sheetId', document.getElementById('cfgSheetId').value.trim());
+  localStorage.setItem('tr7cp_webhookUrl', document.getElementById('cfgWebhook').value.trim());
+  closeConfig();
+  toast('✅ Configuration sauvegardée', 'success');
+}
+
+// =============================
+// DATA STORE (localStorage)
+// =============================
+function getPosts() {
+  return JSON.parse(localStorage.getItem('tr7cp_posts') || '[]');
+}
+
+function savePosts(posts) {
+  localStorage.setItem('tr7cp_posts', JSON.stringify(posts));
+  updateStats();
+  renderCalendar();
+  renderList();
+}
+
+function addPost(post) {
+  const posts = getPosts();
+  post.id = Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+  post.createdAt = new Date().toISOString();
+  posts.push(post);
+  savePosts(posts);
+  return post;
+}
+
+function deletePost(id) {
+  if (!confirm('Supprimer ce post ?')) return;
+  const posts = getPosts().filter(p => p.id !== id);
+  savePosts(posts);
+  toast('🗑️ Post supprimé', 'info');
+}
+
+function editPost(id) {
+  const post = getPosts().find(p => p.id === id);
+  if (!post) return;
+  document.getElementById('postTopic').value = post.topic;
+  document.getElementById('postDate').value = post.date;
+  document.getElementById('postTime').value = post.time || '07:00';
+  document.getElementById('postType').value = post.type;
+  document.getElementById('postAudience').value = post.audience;
+  document.getElementById('postTone').value = post.tone;
+  document.getElementById('postUrls').value = post.urls || '';
+  document.getElementById('postNotes').value = post.notes || '';
+  // Set platforms
+  document.querySelectorAll('.platform-check').forEach(el => {
+    const cb = el.querySelector('input');
+    const active = (post.platforms || []).includes(cb.value);
+    cb.checked = active;
+    el.classList.toggle('active', active);
+  });
+  // Delete old, will re-add on save
+  const posts = getPosts().filter(p => p.id !== id);
+  savePosts(posts);
+  toast('✏️ Post chargé pour modification', 'info');
+}
+
+// =============================
+// FORM ACTIONS
+// =============================
+function getFormData() {
+  const topic = document.getElementById('postTopic').value.trim();
+  if (!topic) { toast('❌ Le sujet est obligatoire', 'error'); return null; }
+  
+  const platforms = [];
+  document.querySelectorAll('.platform-check input:checked').forEach(cb => platforms.push(cb.value));
+  if (!platforms.length) { toast('❌ Sélectionnez au moins une plateforme', 'error'); return null; }
+
+  return {
+    topic,
+    date: document.getElementById('postDate').value || new Date().toISOString().split('T')[0],
+    time: document.getElementById('postTime').value || '07:00',
+    type: document.getElementById('postType').value,
+    audience: document.getElementById('postAudience').value,
+    tone: document.getElementById('postTone').value,
+    platforms,
+    urls: document.getElementById('postUrls').value.trim(),
+    notes: document.getElementById('postNotes').value.trim(),
+    status: 'planifie'
+  };
+}
+
+function resetForm() {
+  document.getElementById('postTopic').value = '';
+  document.getElementById('postUrls').value = '';
+  document.getElementById('postNotes').value = '';
+  // Set date to tomorrow
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  document.getElementById('postDate').value = tomorrow.toISOString().split('T')[0];
+}
+
+function saveDraft() {
+  const data = getFormData();
+  if (!data) return;
+  data.status = 'brouillon';
+  addPost(data);
+  resetForm();
+  toast('💾 Brouillon enregistré', 'success');
+}
+
+async function schedulePost() {
+  const data = getFormData();
+  if (!data) return;
+  data.status = 'planifie';
+  const post = addPost(data);
+  resetForm();
+  toast('📅 Post planifié !', 'success');
+  
+  // Send to webhook for scheduling
+  await sendToWebhook(post);
+}
+
+async function publishNow() {
+  const data = getFormData();
+  if (!data) return;
+  data.status = 'en_cours';
+  data.date = new Date().toISOString().split('T')[0];
+  const post = addPost(data);
+  resetForm();
+  toast('⚡ Publication en cours...', 'info');
+  
+  await sendToWebhook(post, true);
+}
+
+async function triggerPost(id) {
+  const post = getPosts().find(p => p.id === id);
+  if (!post) return;
+  if (!confirm(`Publier maintenant :\n"${post.topic}" ?`)) return;
+  await sendToWebhook(post, true);
+}
+
+async function sendToWebhook(post, immediate = false) {
+  const cfg = getConfig();
+  const payload = {
+    topic: post.topic,
+    target_audience: post.audience,
+    tone: post.tone,
+    reference_urls: post.urls || cfg.sheetId ? `https://docs.google.com/spreadsheets/d/${cfg.sheetId}` : '',
+    platforms: post.platforms,
+    type: post.type,
+    scheduled_date: post.date,
+    scheduled_time: post.time,
+    notes: post.notes,
+    immediate: immediate
+  };
+
+  try {
+    const resp = await fetch(cfg.webhookUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    
+    if (resp.ok) {
+      toast(immediate ? '✅ Workflow déclenché !' : '✅ Envoyé au planning', 'success');
+      if (immediate) {
+        const posts = getPosts();
+        const p = posts.find(x => x.id === post.id);
+        if (p) p.status = 'envoye';
+        savePosts(posts);
+      }
+    } else {
+      toast('⚠️ Webhook répondu avec erreur', 'error');
+    }
+  } catch (e) {
+    console.error(e);
+    toast('⚠️ Impossible de contacter le webhook (enregistré localement)', 'error');
+  }
+}
+
+// =============================
+// PLATFORM TOGGLE
+// =============================
+function togglePlatform(el) {
+  const cb = el.querySelector('input');
+  cb.checked = !cb.checked;
+  el.classList.toggle('active', cb.checked);
+}
+
+// =============================
+// CALENDAR
+// =============================
+let currentMonth = new Date().getMonth();
+let currentYear = new Date().getFullYear();
+
+const MONTHS_FR = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+const DAYS_FR = ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
+
+function navMonth(dir) {
+  currentMonth += dir;
+  if (currentMonth > 11) { currentMonth = 0; currentYear++; }
+  if (currentMonth < 0) { currentMonth = 11; currentYear--; }
+  renderCalendar();
+}
+
+function renderCalendar() {
+  const grid = document.getElementById('calGrid');
+  document.getElementById('calTitle').textContent = `${MONTHS_FR[currentMonth]} ${currentYear}`;
+  
+  const posts = getPosts();
+  const today = new Date();
+  const firstDay = new Date(currentYear, currentMonth, 1);
+  let startDay = firstDay.getDay() - 1;
+  if (startDay < 0) startDay = 6;
+  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+  const daysInPrev = new Date(currentYear, currentMonth, 0).getDate();
+
+  let html = DAYS_FR.map(d => `<div class="cal-header">${d}</div>`).join('');
+
+  // Previous month days
+  for (let i = startDay - 1; i >= 0; i--) {
+    html += `<div class="cal-day other-month"><div class="cal-day-num">${daysInPrev - i}</div></div>`;
+  }
+
+  // Current month
+  for (let d = 1; d <= daysInMonth; d++) {
+    const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+    const isToday = today.getFullYear() === currentYear && today.getMonth() === currentMonth && today.getDate() === d;
+    const dayPosts = posts.filter(p => p.date === dateStr);
+    
+    let eventsHtml = dayPosts.map(p => 
+      `<div class="cal-event type-${p.type} ${p.status === 'envoye' ? 'sent' : ''}" 
+            onclick="editPost('${p.id}')" title="${p.topic}">
+        ${p.topic.substring(0, 20)}${p.topic.length > 20 ? '…' : ''}
+      </div>`
+    ).join('');
+
+    html += `<div class="cal-day${isToday ? ' today' : ''}" onclick="setDate('${dateStr}')">
+      <div class="cal-day-num">${d}</div>${eventsHtml}
+    </div>`;
+  }
+
+  // Next month days
+  const totalCells = startDay + daysInMonth;
+  const remaining = (7 - (totalCells % 7)) % 7;
+  for (let i = 1; i <= remaining; i++) {
+    html += `<div class="cal-day other-month"><div class="cal-day-num">${i}</div></div>`;
+  }
+
+  grid.innerHTML = html;
+}
+
+function setDate(dateStr) {
+  document.getElementById('postDate').value = dateStr;
+  document.getElementById('postTopic').focus();
+}
+
+// =============================
+// LIST VIEW
+// =============================
+function renderList() {
+  const container = document.getElementById('listView');
+  const posts = getPosts().sort((a, b) => a.date.localeCompare(b.date));
+
+  if (!posts.length) {
+    container.innerHTML = `<div class="empty-state">
+      <div class="icon">📅</div>
+      <p>Aucun post planifié. Commencez par en créer un !</p>
+    </div>`;
+    return;
+  }
+
+  const typeLabels = {
+    educatif: '📚 Éducatif', carousel: '🎠 Carousel', storytelling: '📖 Story',
+    case_study: '🔍 Case Study', expert: '🎓 Expert', promo: '🚀 Promo'
+  };
+
+  container.innerHTML = posts.map(p => `
+    <div class="list-item">
+      <div>
+        <div class="list-date">${formatDate(p.date)}</div>
+        <div style="font-size:11px;color:var(--tr7-text-muted)">${p.time || '07:00'}</div>
+      </div>
+      <div>
+        <div class="list-topic">${p.topic}</div>
+        <div style="font-size:11px;color:var(--tr7-text-muted);margin-top:2px">
+          ${(p.platforms || []).join(' • ')}
+        </div>
+      </div>
+      <div>
+        <span class="cal-event type-${p.type}" style="font-size:11px;padding:4px 10px">${typeLabels[p.type] || p.type}</span>
+      </div>
+      <div class="list-actions">
+        <button onclick="triggerPost('${p.id}')" title="Publier maintenant">⚡</button>
+        <button onclick="editPost('${p.id}')" title="Modifier">✏️</button>
+        <button class="delete" onclick="deletePost('${p.id}')" title="Supprimer">🗑️</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function formatDate(dateStr) {
+  const d = new Date(dateStr + 'T00:00');
+  return d.toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short' });
+}
+
+// =============================
+// VIEW SWITCH
+// =============================
+function switchView(view, btn) {
+  document.querySelectorAll('.view-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('calendarView').style.display = view === 'calendar' ? 'block' : 'none';
+  document.getElementById('listView').style.display = view === 'list' ? 'block' : 'none';
+}
+
+// =============================
+// STATS
+// =============================
+function updateStats() {
+  const posts = getPosts();
+  const now = new Date();
+  const weekStart = new Date(now);
+  weekStart.setDate(now.getDate() - now.getDay() + 1);
+  const weekEnd = new Date(weekStart);
+  weekEnd.setDate(weekStart.getDate() + 6);
+
+  document.getElementById('statTotal').textContent = posts.filter(p => p.status !== 'envoye').length;
+  document.getElementById('statWeek').textContent = posts.filter(p => {
+    const d = new Date(p.date);
+    return d >= weekStart && d <= weekEnd;
+  }).length;
+  document.getElementById('statSent').textContent = posts.filter(p => p.status === 'envoye').length;
+}
+
+// =============================
+// TOAST
+// =============================
+function toast(msg, type = 'info') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = `toast ${type} show`;
+  setTimeout(() => el.classList.remove('show'), 3000);
+}
+
+// =============================
+// INIT
+// =============================
+document.addEventListener('DOMContentLoaded', () => {
+  // Set default date to tomorrow
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  document.getElementById('postDate').value = tomorrow.toISOString().split('T')[0];
+  
+  renderCalendar();
+  renderList();
+  updateStats();
+});
+</script>
+</body>
+</html>
